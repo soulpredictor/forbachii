@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery of My Madam Ji</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(
+                45deg,
+                #ff69b4,
+                #da70d6,
+                #9370db,
+                #ff1493,
+                #ff69b4,
+                #da70d6
+            );
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+        }
+
+        .color-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            background: radial-gradient(
+                circle at center,
+                rgba(255, 255, 255, 0.2),
+                rgba(255, 20, 147, 0.1)
+            );
+        }
+
+        /* Rest of the styles remain the same as before */
+        .main-heading {
+            font-size: 52px;
+            font-family: 'Poppins', cursive;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            animation: glow 2s infinite alternate, fadeIn 1.5s ease-in-out;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ff4500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        @keyframes glow {
+            0% { 
+                text-shadow: 0 0 15px rgba(255, 215, 0, 0.8),
+                             0 0 25px rgba(255, 140, 0, 0.5);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgb(255, 255, 255),
+                             0 0 45px rgba(255, 63, 239, 0.9);
+            }
+            100% { 
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+                             0 0 35px rgba(226, 37, 255, 0.7);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .gallery-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 1.5s infinite;
+            box-shadow: 0 0 5px #fff;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: shoot 3s linear infinite;
+            opacity: 0;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(200%) translateY(200%) rotate(45deg);
+                opacity: 0;
+            }
+        }
+
+        .gallery {
+            display: flex;
+            gap: 30px;
+            perspective: 1000px;
+            animation: scroll 20s linear infinite;
+            padding: 20px;
+            width: max-content;
+        }
+
+        @keyframes scroll {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(calc(-250px * 10 - 300px), 0, 0); }
+        }
+
+        .gallery:hover {
+            animation-play-state: paused;
+        }
+
+        .card {
+            position: relative;
+            width: 250px;
+            height: 380px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            transform-origin: center center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .card:hover {
+            transform: scale(1.1) translateY(-20px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .card-number {
+            font-size: 28px;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .card-image {
+            width: 210px;
+            height: 240px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .card-image:hover {
+            transform: scale(1.05);
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .card-message {
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-style: italic;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+            line-height: 1.4;
+        }
+
+        .like-btn {
+            padding: 10px 25px;
+            background: rgba(255, 105, 180, 0.4);
+            border: 2px solid white;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .like-btn:hover {
+            background: rgba(255, 105, 180, 0.7);
+            transform: scale(1.1);
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 25px;
+            color: #ff1493;
+            pointer-events: none;
+            animation: float 1.5s ease-out;
+            opacity: 0;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+            z-index: 1000;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) translateX(30px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Pookie Button Styles */
+        .pookie-btn-container {
+            position: fixed;
+            top: 100px;  /* Position it below the heading */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+        .pookie-btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #f9c4ff, #ff9cee);
+            border: 3px solid white;
+            border-radius: 30px;
+            color: #9c27b0;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 2px #fff;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .pookie-btn:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .pookie-btn:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 3s infinite;
+            top: 0;
+            left: 0;
+        }
+
+        @keyframes shimmer {
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Mirror effect background */
+        .mirror-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(5deg) scale(1.1);
+            border-radius: 20px;
+            z-index: 0;
+        }
+
+        .mirror-effect:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.4) 0%,
+                rgba(255, 255, 255, 0) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            border-radius: 20px;
+        }
+
+        .falling-heart {
+            position: fixed;
+            color: pink;
+            font-size: 24px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        @keyframes fallAnimation {
+            0% {
+                transform: translateY(-10px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .welcome-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .welcome-heart {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0;
+            color: #ff69b4;
+            text-shadow: 2px 2px 8px rgba(255, 105, 180, 0.6);
+            animation: welcomeHeartPop 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+        }
+
+        @keyframes welcomeHeartPop {
+            0% {
+                opacity: 0;
+                transform: scale(0) translateY(0) rotate(0deg);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1.2) translateY(0) rotate(10deg);
+            }
+            60% {
+                opacity: 1;
+                transform: scale(1) translateY(-100px) rotate(-10deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5) translateY(-200px) rotate(25deg);
+            }
+        }
+
+        /* Add media queries for mobile optimization */
+        @media screen and (max-width: 768px) {
+            .gallery {
+                gap: 15px;
+                animation: scroll 30s linear infinite; /* Slower scroll on mobile */
+            }
+
+            .card {
+                width: 200px;
+                height: 340px;
+                padding: 15px;
+            }
+
+            .card-image {
+                width: 170px;
+                height: 200px;
+            }
+
+            /* Optimize animations for mobile */
+            @keyframes scroll {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(calc(-200px * 10 - 150px)); }
+            }
+
+            .pookie-btn {
+                padding: 12px 25px;
+                font-size: 18px;
+            }
+        }
+
+        /* Add performance optimization styles */
+        @media (prefers-reduced-motion: reduce) {
+            .gallery {
+                animation-duration: 40s;
+            }
+
+            .star, .shooting-star {
+                animation-duration: 3s;
+            }
+
+            .card {
+                transition: transform 0.3s ease;
+            }
+        }
+    </style>
+    <script src="music-controller.js"></script>
+    <script>
+        // Force audio context creation on first interaction
+        window.addEventListener('load', function() {
+            MusicController.init();
+        }, { once: true });
+    </script>
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <div class="color-overlay"></div>
+    <h1 class="main-heading"></h1>
+    <div class="stars"></div>
+    <div class="gallery-container">
+        <div class="gallery">
+            <!-- Cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Pookie Button -->
+    <div class="pookie-btn-container">
+        <button class="pookie-btn">Pookiee 🎀</button>
+    </div>
+
+    <script>
+        const messages = [
+            "Baccchiiii 💅",
+            "Hizruu Gurll 🧏‍♀️",
+            "Modellll 👑",
+            "Hasti raheee 💗",
+            "Thala paglu 🏏",
+            "Sleepy paglu 😴",
+            "Cute paglu 🐵",
+            "Attitude queen 😌",
+            "Topper 😼",
+            "Pookie 🎀"
+        ];
+        const images = [
+            "photo_6_2025-03-24_17-59-50.jpg",
+            "photo_2_2025-03-24_17-59-50.jpg",
+            "photo_17_2025-03-24_17-59-50.png",
+            "photo_16_2025-03-24_17-59-50.png",
+            "photo_9_2025-03-24_17-59-50.png",
+            "photo_10_2025-03-24_17-59-50.png",
+            "photo_15_2025-03-24_17-59-50.png",
+            "photo_8_2025-03-24_17-59-50.png",
+            "photo_5_2025-03-24_17-59-50.png",
+            "photo_13_2025-03-24_17-59-50.jpg"
+        ];
+
+        // Create stars more efficiently
+        const starsContainer = document.querySelector('.stars');
+        const starCount = window.innerWidth < 600 ? 80 : 120; // Reduced count for better performance
+        
+        const starFragment = document.createDocumentFragment();
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            starFragment.appendChild(star);
+        }
+        starsContainer.appendChild(starFragment);
+
+        // Create shooting stars periodically
+        setInterval(() => {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.left = `${Math.random() * 100}%`;
+            shootingStar.style.top = `${Math.random() * 100}%`;
+            starsContainer.appendChild(shootingStar);
+            
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+        }, 2000);
+
+        // Create and duplicate gallery cards
+        const gallery = document.querySelector('.gallery');
+    
+        function createCard(index) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-number">💝</div>
+                <div class="card-image">
+                    <img src="${images[index % 10]}" alt="Image ${index % 10 + 1}" loading="lazy">
+                </div>
+                <div class="card-message">${messages[index % 10]}</div>
+                <button class="like-btn">🌸 Bless</button>
+            `;
+            
+            const likeBtn = card.querySelector('.like-btn');
+            likeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                createFloatingHearts(e.clientX, e.clientY);
+            });
+            
+            return card;
+        }
+
+        // Create initial set of cards with document fragment
+        const cardFragment = document.createDocumentFragment();
+        for (let i = 0; i < 10; i++) {
+            cardFragment.appendChild(createCard(i));
+        }
+        
+        // Create duplicate set for smooth infinite scroll
+        for (let i = 0; i < 10; i++) {
+            cardFragment.appendChild(createCard(i));
+        }
+        
+        // Add all cards at once
+        gallery.appendChild(cardFragment);
+
+        // Reset scroll position when animation ends
+        gallery.addEventListener('animationend', () => {
+            gallery.style.animation = 'none';
+            gallery.offsetHeight; // Trigger reflow
+            gallery.style.animation = 'scroll 20s linear infinite';
+        });
+
+        // Pookie Button Functionality - Continuous Hearts
+        const pookieBtn = document.querySelector('.pookie-btn');
+        let isCreatingHearts = false;
+        let heartCreationInterval;
+
+        pookieBtn.addEventListener('mousedown', () => {
+            isCreatingHearts = true;
+            createContinuousHearts();
+        });
+
+        document.addEventListener('mouseup', () => {
+            isCreatingHearts = false;
+            clearInterval(heartCreationInterval);
+        });
+
+        function createContinuousHearts() {
+            // Initial burst of hearts
+            createFallingHearts();
+            
+            // Continue creating hearts while button is held
+            heartCreationInterval = setInterval(() => {
+                if (isCreatingHearts) {
+                    createFallingHearts();
+                }
+            }, 500); // Create new hearts every 500ms
+        }
+
+        // Debounce falling hearts for better performance
+        let lastHeartCreation = 0;
+        function createFallingHearts() {
+            const isMobile = window.innerWidth <= 768;
+            const heartCount = isMobile ? 5 : 15; // Fewer hearts on mobile
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'falling-heart';
+                heart.innerHTML = '💗';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.top = `-50px`;
+                
+                const duration = 3 + Math.random() * 2;
+                const rotation = Math.random() * 360;
+                const scale = isMobile ? 0.3 + Math.random() * 0.5 : 0.5 + Math.random() * 1;
+
+                heart.style.animation = `fallAnimation ${duration}s linear`;
+                heart.style.transform = `rotate(${rotation}deg) scale(${scale})`;
+                
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, duration * 1000);
+            }
+        }
+
+        // Create welcome hearts effect
+        function createWelcomeHearts() {
+            const container = document.createElement('div');
+            container.className = 'welcome-hearts';
+            document.body.appendChild(container);
+
+            const symbols = ['💗', '💖', '💝', '💕', '💓'];
+            
+            for (let i = 0; i < 35; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'welcome-heart';
+                    heart.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.top = `${50 + (Math.random() * 20)}%`;
+                    heart.style.animationDelay = `${Math.random() * 0.5}s`;
+                    container.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 1500);
+                }, i * 50);
+            }
+
+            setTimeout(() => container.remove(), 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            MusicController.init();
+            createWelcomeHearts();
+            
+            // Start automatic heart creation
+            setInterval(() => {
+                if (!document.hidden) {  // Only create hearts when page is visible
+                    createFallingHearts();
+                }
+            }, 2000);  // Create hearts every 2 seconds
+        });
+
+        function createFloatingHearts(x, y) {
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < 7; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = `${x}px`;
+                heart.style.top = `${y}px`;
+                heart.style.animationDelay = `${i * 0.1}s`;
+                fragment.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 1500);
+            }
+            document.body.appendChild(fragment);
+        }
+
+        // Optimize the fallAnimation keyframes for better performance
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes fallAnimation {
+                0% {
+                    transform: translateY(-10px) rotate(0deg);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: translateY(105vh) rotate(360deg);
+                    opacity: 0;
+                }
+            }
+
+            .falling-heart {
+                position: fixed;
+                color: pink;
+                font-size: 24px;
+                pointer-events: none;
+                z-index: 1000;
+                will-change: transform;
+            }
+
+            @media (max-width: 768px) {
+                .falling-heart {
+                    font-size: 20px;
+                }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+    <script>
+    // Optimize animations
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reducedMotion.matches) {
+        document.documentElement.style.setProperty('--animation-duration', '0.3s');
+    }
+
+    // Throttle scroll events
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
+                scrollTimeout = null;
+            }, 50);
+        }
+    }, { passive: true });
+
+    // Optimize heart creation
+    function throttledHeartCreation() {
+        let isCreating = false;
+        return () => {
+            if (!isCreating) {
+                isCreating = true;
+                requestAnimationFrame(() => {
+                    createFallingHearts();
+                    isCreating = false;
+                });
+            }
+        };
+    }
+    const optimizedHeartCreation = throttledHeartCreation();
+</script>
+    <script>
+    // Add performance optimizations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Preload images to prevent jank during scrolling
+        images.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+        
+        // Use Intersection Observer for better scroll performance
+        if ('IntersectionObserver' in window) {
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.visibility = 'visible';
+                        entry.target.style.transform = 'translateZ(0)';
+                    } else {
+                        entry.target.style.visibility = 'hidden';
+                    }
+                });
+            }, {
+                rootMargin: '100px 0px'
+            });
+            
+            cards.forEach(card => observer.observe(card));
+        }
+    }, { passive: true });
+    </script>
+</body>
+</html>
