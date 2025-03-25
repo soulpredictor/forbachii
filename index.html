@@ -17,7 +17,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        @keyframes backgroundShimmer {
+        @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -25,10 +25,17 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(45deg, 
-                #ff69b4, #da70d6, #9370db, #ff1493, #ff69b4);
-            background-size: 300% 300%;
-            animation: backgroundShimmer 20s ease infinite;
+            background: linear-gradient(
+                45deg,
+                #222233,
+                #331133,
+                #221144,
+                #330022,
+                #222233,
+                #331133
+            );
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -37,6 +44,7 @@
             overflow: hidden;
             transition: opacity 0.5s ease;
             will-change: background-position;
+            color: white;
         }
 
         .stars {
@@ -93,48 +101,105 @@
 
         .container {
             text-align: center;
-            padding: 20px;
+            padding: 40px;
             max-width: 900px;
             width: 90%;
             position: relative;
             z-index: 10;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            background-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background-color: rgba(30, 30, 60, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transform: translateZ(0);
+            overflow: hidden;
+        }
+
+        .container:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(255, 255, 255, 0) 50%, 
+                rgba(255, 255, 255, 0.05) 100%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         .main-heading {
-            font-family: 'Dancing Script', cursive;
+            font-weight: bold;
+            font-family: 'Comic Sans MS', cursive;
             font-size: clamp(2.5rem, 6vw, 4rem);
             color: white;
             margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
-                         0 0 15px rgba(255, 20, 147, 0.4);
             position: relative;
+            animation: simpleGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes simpleGlow {
+            0% {
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.4),
+                             0 0 10px rgba(255, 255, 255, 0.2);
+            }
+            100% {
+                text-shadow: 0 0 8px rgba(255, 255, 255, 0.6),
+                             0 0 15px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .main-heading span,
+        .main-heading emoji {
+            color: white !important;
+            text-shadow: none;
+            -webkit-text-fill-color: white;
+            animation: none;
+        }
+
+        @keyframes shimmerEffect {
+            0% { left: -100%; }
+            100% { left: 200%; }
         }
 
         .gif-container {
             width: 250px;
             height: 250px;
             margin: 20px auto;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 30, 60, 0.25);
             border-radius: 20px;
             backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             will-change: transform;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gif-container:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                rgba(0, 0, 0, 0.1) 100%);
+            pointer-events: none;
+            border-radius: 20px;
         }
 
         .gif-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25),
+                        0 0 30px rgba(255, 105, 180, 0.1);
         }
 
         .gif-container img {
@@ -142,33 +207,42 @@
             max-height: 100%;
             object-fit: contain;
             border-radius: 15px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s ease;
+        }
+
+        .gif-container:hover img {
+            transform: scale(1.05);
         }
 
         .button-container {
             display: flex;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 20px;
+            margin-top: 30px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 12px 30px;
             font-size: 1.1rem;
             font-family: 'Dancing Script', cursive;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(60, 60, 120, 0.3);
             color: white;
             backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             min-width: 180px;
             letter-spacing: 1px;
             position: relative;
             overflow: hidden;
             z-index: 1;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2),
+                       inset 0 0 10px rgba(255, 255, 255, 0.05);
         }
 
         .btn:after {
@@ -178,7 +252,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(30, 30, 60, 0.5);
             border-radius: 50px;
             z-index: -2;
         }
@@ -191,15 +265,18 @@
             width: 0%;
             height: 100%;
             background-color: rgba(255, 105, 180, 0.3);
-            transition: all 0.3s;
+            transition: all 0.4s;
             border-radius: 50px;
             z-index: -1;
         }
 
         .btn:hover {
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3),
+                        0 0 20px rgba(255, 105, 180, 0.2);
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .btn:hover:before {
@@ -207,7 +284,7 @@
         }
 
         .btn:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -217,7 +294,7 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 15px;
+                padding: 30px 15px;
                 width: 95%;
             }
             
@@ -227,7 +304,7 @@
             }
             
             .button-container {
-                gap: 12px;
+                gap: 15px;
             }
             
             .btn {
@@ -275,7 +352,7 @@
                 transition: none !important;
             }
             body {
-                background: linear-gradient(45deg, #ff69b4, #da70d6, #9370db);
+                background: linear-gradient(45deg, #222233, #331133, #221144, #330022);
                 background-size: 100% 100%;
             }
         }
@@ -284,7 +361,7 @@
 <body>
     <div class="stars"></div>
     <div class="container">
-        <h1 class="main-heading">By Aayushiiii 💅</h1>
+        <h1 class="main-heading">By Aayushiiii <span>💅</span></h1>
         <div class="gif-container">
             <img src="./kiss (1).gif" alt="Cute GIF" loading="lazy">
         </div>
@@ -300,7 +377,7 @@
         let heartRafId;
         
         const starsContainer = document.querySelector('.stars');
-        const starCount = window.innerWidth < 768 ? 150 : 800; // Greatly reduced count
+        const starCount = window.innerWidth < 768 ? 150 : 300; // Optimized count
         
         // Only create stars when visible in viewport
         function createStars() {
@@ -367,11 +444,11 @@
         
         // Handle color change and navigation
         const gradients = [
-            'linear-gradient(45deg, #ff69b4, #da70d6, #9370db, #ff1493, #ff69b4)',
-            'linear-gradient(45deg, #ff1493, #ff69b4, #da70d6, #9370db, #ff1493)',
-            'linear-gradient(45deg, #da70d6, #9370db, #ff1493, #ff69b4, #da70d6)',
-            'linear-gradient(45deg, #ff69b4, #ff1493, #da70d6, #9370db, #ff69b4)',
-            'linear-gradient(45deg, #9370db, #da70d6, #ff69b4, #ff1493, #9370db)'
+            'linear-gradient(45deg, #222233, #331133, #221144, #330022, #222233, #331133)',
+            'linear-gradient(45deg, #2c3e50, #4a47a3, #ad5389, #2c3e50)',
+            'linear-gradient(45deg, #0f0c29, #302b63, #24243e, #0f0c29)',
+            'linear-gradient(45deg, #000428, #004e92, #000428)',
+            'linear-gradient(45deg, #3a1c71, #d76d77, #ffaf7b, #3a1c71)'
         ];
 
         let currentGradient = 0;
@@ -394,7 +471,7 @@
                 
                 currentGradient = (currentGradient + 1) % gradients.length;
                 body.style.background = gradients[currentGradient];
-                body.style.backgroundSize = '300% 300%';
+                body.style.backgroundSize = '400% 400%';
                 
                 colorTimeout = setTimeout(() => colorTimeout = null, 300);
             });
